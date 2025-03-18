@@ -8,11 +8,13 @@
 # # hi.("hi") #hi
 # hi.({"Ann", "Welcome"}) #Welcome, Ann!
 #=========[2]map==============
+#map(list, func) применит функц/лямбду func к (кажд) эл списка list
+
 # defmodule Demo do
 #   # def map(list, func), do: do_map([], list, func) #[8, 6, 4, 2] неверно/первёрнутый!
 #   def map(list, func), do: do_map([], list, func) |> Enum.reverse()
 
-#   defp do_map(new_list, [], _), do: new_list
+#   defp do_map(new_list, [], _), do: new_list #конец/выход из цыкла //вернуть рез
 
 #   defp do_map(new_list, [ head | tail ], func) do
 #     [ func.(head) | new_list ] |> do_map(tail, func)
@@ -32,7 +34,7 @@
 # # end
 
 # # creation_date.("elixir") |> IO.inspect() #2011
-# # creation_date.("erlang") |> IO.inspect() #nil
+# # creation_date.("erlang") |> IO.inspect() #nil   #Not sure about erlang
 
 # defmodule Demo do
 #   # def map(list, func), do: do_map([], list, func) #[8, 6, 4, 2] неверно/первёрнутый!
@@ -65,7 +67,7 @@
 # # handler.(2) |> IO.inspect() #4
 
 # # handler = &((&1 * &1) / &2)
-# # handler.(4, 2) |> IO.inspect() #8.0
+# # handler.(4, 2) |> IO.inspect() #8.0  #4 * 4 (16) / 2 = 8
 
 # # handler = fn(x) -> IO.puts(x) end
 # # handler = &(IO.puts(&1)) #то же самое!
@@ -89,6 +91,7 @@
 # ) |>
 # IO.inspect() #["elephant", "mouse"]
 #=========[6]closure=======================
+#closure - переменные (из окружения) можно юзать внутри лямбд
 # num = 3
 # handler = &(&1 * num)
 # handler.(2) |> IO.inspect() #6

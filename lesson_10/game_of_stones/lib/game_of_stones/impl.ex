@@ -1,5 +1,26 @@
 # Implimentation (сервисы)
 defmodule GameOfStones.Impl do
+  #[11]задаём старт кол камешков (можн только на старте игры)====
+  def do_set({player, num_stones})
+    when not is_integer(num_stones) or num_stones < 4 do
+      { # когда всё плохо
+        :reply,
+        {
+          :error,
+          "You can't set that number of stones (You have to set at least 4 stones to play fair)!" #reason /причина ошибки
+        },
+        # вернуть новое состояние сервера/current_stones
+        {player, nil, :game_ended}
+      }
+  end
+
+  #кейс: когда всё хорошо/юзер ввёл норм 'стартовое кол камней'
+  def do_set({player, num_stones}) do
+    {:reply,
+    {:stones_set, player, num_stones}, # ответ клиенту
+    {player, num_stones, :game_in_progress}} # новое состояние сервера/current_stones
+  end
+
   # должен проверить что это кол камней можно взять И вернуть схожую строку:
   # {:reply, {player, current_stones}, {player, current_stones, :game_in_progress}}
 
@@ -14,7 +35,7 @@ defmodule GameOfStones.Impl do
       :reply,
       {
         :error,
-        "You can take from 1 to 3 stones, and it should exceed the total count of stones!"
+        "You can take from 1 to 3 stones, and it should exceed the total count of stones!" #reason /причина ошибки
       },
       # вернуть новое состояние сервера/current_stones
       {player, current_stones, :game_in_progress}

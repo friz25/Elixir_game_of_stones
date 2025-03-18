@@ -6,12 +6,12 @@
 #   def ask_number, do: ask_number() #вечный цикл / завис проги
 # end
 
-#=== цель1 - валидация (того что юзер ввёл (с клавиатуры))
+#=== цель1 - чек/валидация (того что юзер ввёл (с клавиатуры))
 # defmodule Demo do
 #   def ask_number do
 #     IO.gets("Пожалуйста введите число (Int): ") |>
 #     Integer.parse |> #преобразовали в целое число/Integer
-#     check_input #чек/верификация результата/преобразования
+#     check_input #чек/валидация результата/преобразования
 #   end
 
 #   defp check_input(:error), do: ask_number() #если 'error' > перезапустим функцию
@@ -54,7 +54,7 @@
 # list_b = [1 | [2 | [3] ] ]
 # list_a == list_b #True
 
-# #оч быстрая опирация (добавл 1го элемента (слева))
+# #оч быстрая операция (добавл 1го элемента (слева))
 # list = [1,2,3]
 # new_el = 0
 # new_list = [ new_el | list ] #[0,1,2,3]
@@ -94,16 +94,18 @@ defmodule Demo do
     do_len(total_length + 1, tail) # optimized!
   end
 
-  defp do_len(total_length, []), do: total_length
+  defp do_len(total_length, []), do: total_length #конец/выход из цыкла //вернуть рез
   #====[4]span/2============
+  #=== цель - вернуть список (от числа X до числа Y)======
   def span(from, to), do: do_span([], from, to)
 
-  defp do_span(list, from, to) when from > to, do: list
+  defp do_span(list, from, to) when from > to, do: list #конец/выход из цыкла //вернуть рез
 
   defp do_span(list, from, to) do
     do_span([to | list], from, to - 1)
   end
   #====[5]max/1============
+  #=== цель - найти макс число (в списке)======
   def max([ value | [ head | tail ] ]) when value < head do
     max([ head | tail ])
   end
@@ -125,7 +127,7 @@ end
 
 # Домашнее задание
 #1) span/2 "сделать более надёжной"/(сейчас) если один из арг будет неЦелое то error
-#2) реализовать когда 1й > 2го # 10 |> Demo.span(2) |> IO.inspect() #[]
+#2) реализовать когда 1й > 2го # 10 |> Demo.span(2) |> IO.inspect() #[10, 9, 8, 7, ...]
 #3) max/1 "сделать более надёжной"/(сейчас) если один из арг будет неЦелое то error
 #4) напишите функ keep_odd/1 должна принять список А вернуть список (только нечётных)
 #так чтоб Demo.keep_odd([1,2,4,10,3,101]) #1,3,101

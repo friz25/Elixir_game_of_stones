@@ -129,6 +129,7 @@ end
 # Demo.divide(3, "test")
 Demo.divide(3, "test") |> IO.inspect()
 
+#Еще виды Guard clauses/пограничные условия :
 # Comparison operators == > < >= <=
 # Arithmetic + - * /
 # Boolean: and, or, !,

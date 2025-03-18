@@ -2,14 +2,43 @@
 defmodule GameOfStones.Client do
   @server GameOfStones.Server
 
-  def play(initial_stones_num) do
-    GenServer.start_link(@server, {:started, initial_stones_num}, name: @server) #start_link делает цепочку процессов
+  # GameOfStones.Client.set_initial_stones(15)
 
-    {player, current_stones} = GenServer.call(@server, :current_state)
-
-    IO.puts("Welcome! It's player #{player} turn. #{current_stones} stones in the pile.")
+  #[11]чтоб запускать через >>game_of_stones --stones 30
+  def main(argv) do
+    #устанав нач кол камней
+    parse(argv) |> set_initial_stones()
 
     next_turn()
+  end
+
+  #устанав нач кол камней
+  def set_initial_stones(stones_to_set) do
+    case GenServer.call(@server, {:set, stones_to_set}) do
+      #когда всё хорошо
+      {:stones_set, player, num_stones} ->
+        IO.puts("Welcome! It's player #{player} turn. #{num_stones} stones in the pile.")
+
+      #когда всё плохо (выведем ошибку И перезапустим игру)
+      {:error, reason} ->
+        IO.puts("\nThere was an error: #{reason}")
+        exit(:normal)
+    end
+
+    #handle_call({:set, num_stones}, _, {player, nil, :started})
+  end
+
+  #парсит ком строку >>game_of_stones --stones 30 (достаёт stones=30)
+  defp parse(arguments) do
+    {opts, _, _} = OptionParser.parse(arguments, switches: [stones: :integer])
+
+    # opts |> Keyword.get(:stones, 30) #мол 30 - default кол камней (если мы прост не указали его в строке терминала)
+    opts |> Keyword.get(
+      :stones,
+      #тут default знач камней/если не ввели в строке терминала (берёться из mix.ex из application.env /переменных окружения)
+      # Application.compile_env(:game_of_stones, :default_gamestart_stones, 30) #если env храняться в mix.ex
+      Application.get_env(:game_of_stones, :default_gamestart_stones, 30) #если env храняться в файле config/config.exs
+      )
   end
 
   defp next_turn do
